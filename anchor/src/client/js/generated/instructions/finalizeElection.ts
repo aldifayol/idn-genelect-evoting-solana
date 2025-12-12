@@ -24,90 +24,93 @@ import {
   type Instruction,
   type InstructionWithAccounts,
   type InstructionWithData,
+  type ReadonlySignerAccount,
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-  type WritableSignerAccount,
 } from "gill";
 import { IDNGENELECTEVOTINGSOLANA_PROGRAM_ADDRESS } from "../programs";
 import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
-export const CLOSE_DISCRIMINATOR = new Uint8Array([
-  98, 165, 201, 177, 108, 65, 206, 96,
+export const FINALIZE_ELECTION_DISCRIMINATOR = new Uint8Array([
+  175, 212, 115, 202, 87, 250, 48, 167,
 ]);
 
-export function getCloseDiscriminatorBytes() {
-  return fixEncoderSize(getBytesEncoder(), 8).encode(CLOSE_DISCRIMINATOR);
+export function getFinalizeElectionDiscriminatorBytes() {
+  return fixEncoderSize(getBytesEncoder(), 8).encode(
+    FINALIZE_ELECTION_DISCRIMINATOR,
+  );
 }
 
-export type CloseInstruction<
+export type FinalizeElectionInstruction<
   TProgram extends string = typeof IDNGENELECTEVOTINGSOLANA_PROGRAM_ADDRESS,
-  TAccountPayer extends string | AccountMeta<string> = string,
-  TAccountIdngenelectevotingsolana extends string | AccountMeta<string> =
-    string,
+  TAccountCommissioner extends string | AccountMeta<string> = string,
+  TAccountElection extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
   InstructionWithAccounts<
     [
-      TAccountPayer extends string
-        ? WritableSignerAccount<TAccountPayer> &
-            AccountSignerMeta<TAccountPayer>
-        : TAccountPayer,
-      TAccountIdngenelectevotingsolana extends string
-        ? WritableAccount<TAccountIdngenelectevotingsolana>
-        : TAccountIdngenelectevotingsolana,
+      TAccountCommissioner extends string
+        ? ReadonlySignerAccount<TAccountCommissioner> &
+            AccountSignerMeta<TAccountCommissioner>
+        : TAccountCommissioner,
+      TAccountElection extends string
+        ? WritableAccount<TAccountElection>
+        : TAccountElection,
       ...TRemainingAccounts,
     ]
   >;
 
-export type CloseInstructionData = { discriminator: ReadonlyUint8Array };
+export type FinalizeElectionInstructionData = {
+  discriminator: ReadonlyUint8Array;
+};
 
-export type CloseInstructionDataArgs = {};
+export type FinalizeElectionInstructionDataArgs = {};
 
-export function getCloseInstructionDataEncoder(): FixedSizeEncoder<CloseInstructionDataArgs> {
+export function getFinalizeElectionInstructionDataEncoder(): FixedSizeEncoder<FinalizeElectionInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: CLOSE_DISCRIMINATOR }),
+    (value) => ({ ...value, discriminator: FINALIZE_ELECTION_DISCRIMINATOR }),
   );
 }
 
-export function getCloseInstructionDataDecoder(): FixedSizeDecoder<CloseInstructionData> {
+export function getFinalizeElectionInstructionDataDecoder(): FixedSizeDecoder<FinalizeElectionInstructionData> {
   return getStructDecoder([
     ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
-export function getCloseInstructionDataCodec(): FixedSizeCodec<
-  CloseInstructionDataArgs,
-  CloseInstructionData
+export function getFinalizeElectionInstructionDataCodec(): FixedSizeCodec<
+  FinalizeElectionInstructionDataArgs,
+  FinalizeElectionInstructionData
 > {
   return combineCodec(
-    getCloseInstructionDataEncoder(),
-    getCloseInstructionDataDecoder(),
+    getFinalizeElectionInstructionDataEncoder(),
+    getFinalizeElectionInstructionDataDecoder(),
   );
 }
 
-export type CloseInput<
-  TAccountPayer extends string = string,
-  TAccountIdngenelectevotingsolana extends string = string,
+export type FinalizeElectionInput<
+  TAccountCommissioner extends string = string,
+  TAccountElection extends string = string,
 > = {
-  payer: TransactionSigner<TAccountPayer>;
-  idngenelectevotingsolana: Address<TAccountIdngenelectevotingsolana>;
+  commissioner: TransactionSigner<TAccountCommissioner>;
+  election: Address<TAccountElection>;
 };
 
-export function getCloseInstruction<
-  TAccountPayer extends string,
-  TAccountIdngenelectevotingsolana extends string,
+export function getFinalizeElectionInstruction<
+  TAccountCommissioner extends string,
+  TAccountElection extends string,
   TProgramAddress extends Address =
     typeof IDNGENELECTEVOTINGSOLANA_PROGRAM_ADDRESS,
 >(
-  input: CloseInput<TAccountPayer, TAccountIdngenelectevotingsolana>,
+  input: FinalizeElectionInput<TAccountCommissioner, TAccountElection>,
   config?: { programAddress?: TProgramAddress },
-): CloseInstruction<
+): FinalizeElectionInstruction<
   TProgramAddress,
-  TAccountPayer,
-  TAccountIdngenelectevotingsolana
+  TAccountCommissioner,
+  TAccountElection
 > {
   // Program address.
   const programAddress =
@@ -115,11 +118,8 @@ export function getCloseInstruction<
 
   // Original accounts.
   const originalAccounts = {
-    payer: { value: input.payer ?? null, isWritable: true },
-    idngenelectevotingsolana: {
-      value: input.idngenelectevotingsolana ?? null,
-      isWritable: true,
-    },
+    commissioner: { value: input.commissioner ?? null, isWritable: false },
+    election: { value: input.election ?? null, isWritable: true },
   };
   const accounts = originalAccounts as Record<
     keyof typeof originalAccounts,
@@ -129,38 +129,38 @@ export function getCloseInstruction<
   const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
-      getAccountMeta(accounts.payer),
-      getAccountMeta(accounts.idngenelectevotingsolana),
+      getAccountMeta(accounts.commissioner),
+      getAccountMeta(accounts.election),
     ],
-    data: getCloseInstructionDataEncoder().encode({}),
+    data: getFinalizeElectionInstructionDataEncoder().encode({}),
     programAddress,
-  } as CloseInstruction<
+  } as FinalizeElectionInstruction<
     TProgramAddress,
-    TAccountPayer,
-    TAccountIdngenelectevotingsolana
+    TAccountCommissioner,
+    TAccountElection
   >);
 }
 
-export type ParsedCloseInstruction<
+export type ParsedFinalizeElectionInstruction<
   TProgram extends string = typeof IDNGENELECTEVOTINGSOLANA_PROGRAM_ADDRESS,
   TAccountMetas extends readonly AccountMeta[] = readonly AccountMeta[],
 > = {
   programAddress: Address<TProgram>;
   accounts: {
-    payer: TAccountMetas[0];
-    idngenelectevotingsolana: TAccountMetas[1];
+    commissioner: TAccountMetas[0];
+    election: TAccountMetas[1];
   };
-  data: CloseInstructionData;
+  data: FinalizeElectionInstructionData;
 };
 
-export function parseCloseInstruction<
+export function parseFinalizeElectionInstruction<
   TProgram extends string,
   TAccountMetas extends readonly AccountMeta[],
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
     InstructionWithData<ReadonlyUint8Array>,
-): ParsedCloseInstruction<TProgram, TAccountMetas> {
+): ParsedFinalizeElectionInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 2) {
     // TODO: Coded error.
     throw new Error("Not enough accounts");
@@ -173,10 +173,7 @@ export function parseCloseInstruction<
   };
   return {
     programAddress: instruction.programAddress,
-    accounts: {
-      payer: getNextAccount(),
-      idngenelectevotingsolana: getNextAccount(),
-    },
-    data: getCloseInstructionDataDecoder().decode(instruction.data),
+    accounts: { commissioner: getNextAccount(), election: getNextAccount() },
+    data: getFinalizeElectionInstructionDataDecoder().decode(instruction.data),
   };
 }
