@@ -19,9 +19,9 @@ Technical concepts explained in simple terms with examples.
 ### 📝 Guides
 Step-by-step tutorials for common tasks.
 
-- [Deployment Guide](./guides/deployment.md) *(coming soon)*
-- [Testing Guide](./guides/testing.md) *(coming soon)*
-- [Frontend Integration](./guides/frontend-integration.md) *(coming soon)*
+- [Deployment Guide](./guides/deployment.md) ✅
+- [Testing Guide](./guides/testing.md) ✅
+- [Frontend Integration](./guides/frontend-integration.md) ✅
 
 ### 📋 Reference
 Project-specific documentation and references.
@@ -63,4 +63,4 @@ This documentation grows based on questions and needs. If you have a topic you'd
 
 ---
 
-**Last Updated**: December 11, 2025
+**Last Updated**: December 12, 2025
