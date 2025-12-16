@@ -73,6 +73,12 @@ export function useInitializeElectionMutation({ account }: { account: UiWalletAc
         console.log('Instruction accounts:', instruction.accounts)
         console.log('Instruction program:', instruction.programAddress)
 
+        // Log the accounts in detail for debugging
+        console.log('Account details:')
+        instruction.accounts.forEach((acc, i) => {
+          console.log(`  [${i}]:`, acc)
+        })
+
         // Send the transaction
         console.log('Sending transaction to wallet...')
         const result = await signAndSend(instruction, signer)

@@ -30,7 +30,7 @@ import {
 } from "../instructions";
 
 export const IDNGENELECTEVOTINGSOLANA_PROGRAM_ADDRESS =
-  "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe" as Address<"Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe">;
+  "FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA" as Address<"FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA">;
 
 export enum IdngenelectevotingsolanaAccount {
   Ballot,
@@ -273,7 +273,7 @@ export function identifyIdngenelectevotingsolanaInstruction(
 }
 
 export type ParsedIdngenelectevotingsolanaInstruction<
-  TProgram extends string = "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe",
+  TProgram extends string = "FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA",
 > =
   | ({
       instructionType: IdngenelectevotingsolanaInstruction.ActivateElection;
