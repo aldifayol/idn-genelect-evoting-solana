@@ -6,7 +6,10 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-idngenelectevotingsolana = "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe"
+idngenelectevotingsolana = "FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA"
+
+[programs.devnet]
+idngenelectevotingsolana = "FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA"
 
 [registry]
 url = "https://api.apr.dev"

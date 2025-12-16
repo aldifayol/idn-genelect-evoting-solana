@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/idngenelectevotingsolana.json`.
  */
 export type Idngenelectevotingsolana = {
-  "address": "Count3AcZucFDPSFBAeHkQ6AvttieKUkyJ8HiQGhQwe",
+  "address": "FRb4ZRPozZeBDrvXEKPqHDBYonp7YQg1WHF95KRKF8cA",
   "metadata": {
     "name": "idngenelectevotingsolana",
     "version": "0.1.0",

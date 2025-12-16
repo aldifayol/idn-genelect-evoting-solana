@@ -47,6 +47,16 @@ export function useVerifyVoterMutation({ account }: { account: UiWalletAccount }
       // AI confidence score (in production, this would come from AI verification service)
       const aiConfidenceScore = 95
 
+      console.log('Building verify voter instruction with params:', {
+        voter: account.address,
+        election: electionPda,
+        voterNik,
+        biometricHashLength: biometricHash.length,
+        photoIpfsHash,
+        verificationTimestamp: verificationTimestamp.toString(),
+        aiConfidenceScore,
+      })
+
       // Build and send the instruction
       const instruction = await getVerifyVoterInstructionAsync({
         voter: signer,
@@ -58,7 +68,20 @@ export function useVerifyVoterMutation({ account }: { account: UiWalletAccount }
         aiConfidenceScore,
       })
 
-      return await signAndSend(instruction, signer)
+      console.log('Instruction created successfully')
+      console.log('Instruction accounts:', instruction.accounts)
+      console.log('Instruction program:', instruction.programAddress)
+
+      // Log the accounts in detail for debugging
+      console.log('Account details:')
+      instruction.accounts.forEach((acc, i) => {
+        console.log(`  [${i}]:`, acc)
+      })
+
+      console.log('Sending transaction to wallet...')
+      const result = await signAndSend(instruction, signer)
+      console.log('Transaction result:', result)
+      return result
     },
     onSuccess: async (tx, variables) => {
       toastTx(tx)
